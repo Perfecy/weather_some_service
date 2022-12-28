@@ -32,7 +32,7 @@ def get_open_weather(lat: float, lon: float) -> dict:
 
 
 def get_crossing(lat: float, lon: float):
-    return requests.get(config.vis_crossing_api.format(55.75222, 37.61556)).json()
+    return requests.get(config.vis_crossing_api.format(lat, lon)).json()
 
 
 def get_openmeteo(lat: float, lon: float):
