@@ -6,12 +6,10 @@ import config
 from pymongo import MongoClient
 from geopy.geocoders import Nominatim
 import requests
+from db import merged_data, unmerged_data
 
 geolocator = Nominatim(user_agent="my_app")
 
-
-client = MongoClient(config.db_connection)
-db = client["Weather"]
 
 cities = config.cities
 
@@ -22,7 +20,7 @@ def get_cords_by_city(city: str) -> tuple:
 
 
 def get_yandex_weather(lat: float, lon: float) -> dict:
-    requests.get(
+    return requests.get(
         config.yandex_api.format(lat, lon), headers=config.yandex_header
     ).json()
 
@@ -34,33 +32,36 @@ def get_open_weather(lat: float, lon: float) -> dict:
 
 
 def get_crossing(lat: float, lon: float):
-    requests.get(config.vis_crossing_api.format(55.75222, 37.61556)).json()
+    return requests.get(config.vis_crossing_api.format(55.75222, 37.61556)).json()
 
 
 def get_openmeteo(lat: float, lon: float):
     pass
 
 
-def get_yandex_weather(city: str):
-    requests.get(
-        config.yandex_api.format(55.75222, 37.61556), headers=config.yandex_header
-    ).json()
-    pass
+# def get_yandex_weather(city: str):
+#     location = get_cords_by_city(city=city)
+#     return get_yandex_weather(*location)
 
 
-def get_open_weather(city: str):
-    pass
+# def get_open_weather(city: str):
+#     location = get_cords_by_city(city=city)
+#     return get_open_weather(*location)
 
 
-def get_crossing(city: str):
-    pass
+# def get_crossing(city: str):
+#     location = get_cords_by_city(city=city)
+#     return get_crossing(*location)
 
 
-def get_city_weather(city: str):
-    pass
+# def get_city_weather(city: str):
+#     pass
 
 
 def get_preform_russian_cities():
+    cities = config.cities
+    for item in cities.items():
+        print(item)
     pass
 
 
@@ -70,7 +71,6 @@ def get_preform_russian_cities():
 # @app.task("every 2 min")
 # async def do_things():
 
-#     print('P1')
 
 if __name__ == "__main__":
     pass
