@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Register System{% endblock %}
+
+{% block content %}
+{%if email %}
+<p>Hello You have Logged in as {{ email }}</p>
+{% endif %}
+
+{% if message  %}
+    <div class="alert alert-secondary" role="alert">
+        <p>{{ message }}</p>
+    </div>
+{% endif %}
+
+
+
+{% from "_formhelpers.html" import render_field %}
+<form method="post">
+  <dl>
+    {{ render_field(form.select) }}
+    <p>
+    {{ render_field(form.search) }}
+  </p></dl>
+  <p><input type="submit" value="Search">
+</p></form>
+
+
+{% if results  %}
+    <div class="alert alert-secondary" role="alert">
+        <p>{{ results }}</p>
+    </div>
+{% endif %}
+
+{% endblock %}
+
