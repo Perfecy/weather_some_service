@@ -1,3 +1,4 @@
+import datetime
 from rocketry import Rocketry
 from rocketry.conds import daily
 import threading
@@ -161,11 +162,11 @@ def get_merged_temp(lat: float, lon: float) -> dict:
                 [
                     directions[
                         int(round(float(res_vis["days"][0]["winddir"]) / 22.5)) % 16
-                    ]
-                    + directions[int(round(float(res_open["wind"]["deg"]) / 22.5)) % 16]
-                    + res_yan["fact"]["wind_dir"].upper()
+                    ],
+                    directions[int(round(float(res_open["wind"]["deg"]) / 22.5)) % 16],
+                    res_yan["fact"]["wind_dir"].upper(),
                 ]
-            ).most_common(1),
+            ).most_common(1)[0][0],
             "wind_speed": (
                 res_vis["days"][0]["windspeed"]
                 + res_open["wind"]["speed"]
@@ -174,6 +175,7 @@ def get_merged_temp(lat: float, lon: float) -> dict:
             / 3,
         },
     }
+    return merged
 
 
 # def get_yandex_weather(city: str):
@@ -195,18 +197,64 @@ def get_merged_temp(lat: float, lon: float) -> dict:
 #     pass
 
 
-def get_preform_russian_cities():
+def get_preform_russian_cities_and_store_data():
     cities = config.cities
+    count_ = 0
     for item in cities.items():
-        print(item)
-    pass
+        print("S")
+        count_ += 1
+        location = item[1]
+        merged = get_merged_temp(*location)
+        unmerged = get_unmerged_temp(*location)
+        print("W")
+        merged.setdefault("city", item[0])
+        merged.setdefault("date", str(datetime.datetime.today().date()))
+        unmerged.setdefault("city", item[0])
+        unmerged.setdefault("date", str(datetime.datetime.today().date()))
+        print("C")
+        merged_data.insert_one(merged)
+        print("M")
+        unmerged_data.insert_one(unmerged)
+        print("U")
+
+    return count_
 
 
-# app = Rocketry()
+def get_weather_on_city(city: str):
+    location = get_cords_by_city(city)
+    print(location)
+    merged = get_merged_temp(*location)
+    unmerged = get_unmerged_temp(*location)
+    print("W")
+    merged.setdefault("date", str(datetime.datetime.today().date()))
+    merged.setdefault("city", city)
+    unmerged.setdefault("city", city)
+    unmerged.setdefault("date", str(datetime.datetime.today().date()))
+    res = {}
+    res.setdefault("merged", merged.copy())
+    res.setdefault("unmerged", unmerged.copy())
+    print("KKKKKKKKK")
+    print(res)
+    print("C")
+    merged_data.insert_one(merged)
+    print("M")
+    unmerged_data.insert_one(
+        unmerged,
+    )
+    print("U")
+    print("AAAAAAAAAAAAAA")
+    print(res)
+    return res
 
 
-# @app.task("every 2 min")
-# async def do_things():
+app = Rocketry()
+
+
+# @app.task("every 1 day")
+# async def upload_weather_on_russia():
+#     print("Started process 'upload_weather_on_russia'")
+#     get_preform_russian_cities_and_store_data()
+#     print("Ended process 'upload_weather_on_russia'")
 
 
 if __name__ == "__main__":

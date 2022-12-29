@@ -20,3 +20,4 @@ client = pymongo.MongoClient("0.0.0.0", server.local_bind_port)
 db = client[MONGO_DB]
 merged_data = db.merged_data
 unmerged_data = db.unmerged_data
+print(merged_data.find_one({"city": "Moscow"}))
