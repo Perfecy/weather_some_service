@@ -216,7 +216,6 @@ def get_preform_russian_cities_and_store_data():
         print("M")
         unmerged_data.insert_one(unmerged)
         print("U")
-
     return count_
 
 

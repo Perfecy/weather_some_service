@@ -130,3 +130,10 @@ dmypy.json
 crawler/config.py
 .DS_Store
 backend/config.py
+backend/docker-compose.yaml
+backend/Dockerfile
+crawler/scheduler_grip.py
+crawler/open.txt
+.gitignore
+crawler/vis.txt
+crawler/yan.txt
