@@ -250,11 +250,11 @@ def get_weather_on_city(city: str):
 app = Rocketry()
 
 
-# @app.task("every 1 day")
-# async def upload_weather_on_russia():
-#     print("Started process 'upload_weather_on_russia'")
-#     get_preform_russian_cities_and_store_data()
-#     print("Ended process 'upload_weather_on_russia'")
+@app.task("every 1 day")
+async def upload_weather_on_russia():
+    print("Started process 'upload_weather_on_russia'")
+    get_preform_russian_cities_and_store_data()
+    print("Ended process 'upload_weather_on_russia'")
 
 
 if __name__ == "__main__":
